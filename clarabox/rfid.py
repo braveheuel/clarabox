@@ -25,7 +25,7 @@ async def _helper(dev, cb):
         if ev.type == ecodes.EV_KEY and ev.value == 0 \
                 and ev.code == ecodes.KEY_ENTER:
             if cb is not None:
-                cb(s)
+                await cb(s)
                 s = ""
         elif ev.type == ecodes.EV_KEY and ev.value == 0:
             key_lookup = _scancodes.get(ev.code)
