@@ -20,6 +20,9 @@ class MusicController:
         self._swipe_ts = datetime.datetime(2020, 1, 1)
         self.host = host
         self.port = port
+        self.last_swiped_id = 0
+        self.last_swiped_id_count = 0
+
         with open(rfid_map, "r") as stream:
             self._yaml = yaml.safe_load(stream)
 
@@ -30,6 +33,13 @@ class MusicController:
         logging.info("Received CardID: %s", cardid)
         current_ts = datetime.datetime.now()
         td = current_ts - self._swipe_ts
+
+        if cardid == self.last_swiped_id:
+            self.last_swiped_id_count += 1
+        else:
+            self.last_swiped_id = cardid
+            self.last_swiped_id_count = 0
+
         if td > self.swipe_timeout:
             try:
                 (is_command, data) = self.retrieve_card(cardid)
