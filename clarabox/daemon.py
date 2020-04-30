@@ -23,15 +23,15 @@ import logging
 cfg = configparser.ConfigParser()
 cfg.read("/etc/clarabox.conf")
 logging.basicConfig(level=logging.DEBUG)
-
+logger = logging.getLogger("daemon")
 
 async def main():
-    logging.info("Init the MusicController...")
+    logger.info("Init the MusicController...")
     mpdc = mpdcontroller.MusicController(cfg["MPD"]["host"],
                                          cfg["MPD"].get("port", None),
                                          cfg["RFID"]["mapping"],
                                          int(cfg["RFID"]["reswipe_time"]))
-    logging.info("Start the Async Gathering...")
+    logger.info("Start the Async Gathering...")
     await asyncio.gather(mpdc.connect_mpd(),
                          rfid.run_reader_loop(cfg["RFID"]["evdevpath"],
                                               mpdc.play_card)
