@@ -30,7 +30,6 @@ class MusicController:
         await self.mpc.connect(self.host, self.port)
 
     async def play_card(self, cardid):
-        logging.info("Received CardID: %s", cardid)
         current_ts = datetime.datetime.now()
         td = current_ts - self._swipe_ts
 
@@ -49,6 +48,7 @@ class MusicController:
             except NoKnownActionException as e:
                 logging.warning(e)
                 return
+            logging.info("Received CardID: %s with data: %s", cardid, data)
             if is_command:
                 await self.command(data)
             else:
