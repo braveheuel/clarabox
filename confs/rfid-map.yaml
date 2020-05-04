@@ -1,0 +1,32 @@
+0011679767:
+        # Ohne Cover
+        playlist: maus
+
+0012111378:
+        playlist: rardiodeltaalternative
+
+0011795461:
+        command: stop
+
+0011857621:
+        #playlist: rolfsvogelhochzeit
+        command: play
+
+0011820790:
+        #playlist: rolfskinderfruehling
+        command: play
+
+0011694811:
+        playlist: maus
+
+0011864363:
+        #playlist: heypippilangstrumpf1
+        command: pause
+
+0011689964:
+        #playlist: heypippilangstrumpf2
+        command: play
+
+0011859447:
+        #playlist: mitmachlieder
+        command: vol+
