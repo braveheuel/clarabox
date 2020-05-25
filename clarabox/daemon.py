@@ -33,7 +33,7 @@ async def main():
                                          cfg["RFID"]["mapping"],
                                          int(cfg["RFID"]["reswipe_time"]))
 
-    gpioc = gpio.GPIOController(cfg["GPIO"], None, cfg.get("GPIO",
+    gpioc = gpio.GPIOController(cfg["GPIO_MAP"], None, cfg.getfloat("GPIO",
                                                            "debounce_time",
                                                            fallback=None))
 
