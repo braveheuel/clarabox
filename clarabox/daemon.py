@@ -18,6 +18,7 @@ import asyncio
 import rfid
 import mpdcontroller
 import logging
+import gpio
 
 
 cfg = configparser.ConfigParser()
@@ -31,6 +32,11 @@ async def main():
                                          cfg["MPD"].get("port", None),
                                          cfg["RFID"]["mapping"],
                                          int(cfg["RFID"]["reswipe_time"]))
+
+    gpioc = gpio.GPIOController(cfg["GPIO"], None, cfg.get("GPIO",
+                                                           "debounce_time",
+                                                           fallback=None))
+
     logger.info("Start the Async Gathering...")
     await asyncio.gather(mpdc.connect_mpd(),
                          rfid.run_reader_loop(cfg["RFID"]["evdevpath"],
