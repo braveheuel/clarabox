@@ -13,13 +13,14 @@ class CardIDNotKnownException(Exception):
 
 class MusicController:
 
-    def __init__(self, host, port, rfid_map, reswipe_time):
+    def __init__(self, host, port, rfid_map, reswipe_time, btn_queue):
         self.mpc = mpd.asyncio.MPDClient()
         self.rfid_map = rfid_map
         self.swipe_timeout = datetime.timedelta(seconds=reswipe_time)
         self._swipe_ts = datetime.datetime(2020, 1, 1)
         self.host = host
         self.port = port
+        self.btn_queue = btn_queue
         self.last_swiped_id = 0
         self.last_swiped_id_count = 0
 
@@ -27,7 +28,18 @@ class MusicController:
             self._yaml = yaml.safe_load(stream)
 
     async def connect_mpd(self):
+        """ Connect to MPD Server and start GPIO listen queue
+        """
         await self.mpc.connect(self.host, self.port)
+        await self._run_listen_btn()
+
+    async def _run_listen_btn(self):
+        while True:
+            logging.info("Run queue.get")
+            cmd = await self.btn_queue.get()
+            logging.info("Received Button Event: %s", cmd)
+            await self.command(cmd)
+            self.btn_queue.task_done()
 
     async def play_card(self, cardid):
         current_ts = datetime.datetime.now()

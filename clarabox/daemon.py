@@ -28,19 +28,23 @@ logger = logging.getLogger("daemon")
 
 async def main():
     logger.info("Init the MusicController...")
+    loop = asyncio.get_event_loop()
+    btn_queue = asyncio.Queue(cfg["GPIO"].getint("max_events", 10))
     mpdc = mpdcontroller.MusicController(cfg["MPD"]["host"],
                                          cfg["MPD"].get("port", None),
                                          cfg["RFID"]["mapping"],
-                                         int(cfg["RFID"]["reswipe_time"]))
-
-    gpioc = gpio.GPIOController(cfg["GPIO_MAP"], None, cfg.getfloat("GPIO",
-                                                           "debounce_time",
-                                                           fallback=None))
+                                         int(cfg["RFID"]["reswipe_time"]),
+                                         btn_queue)
+    gpioc = gpio.GPIOController(cfg["GPIO_MAP"], btn_queue,
+                                cfg.getfloat("GPIO", "debounce_time",
+                                             fallback=None),
+                                loop=loop)
 
     logger.info("Start the Async Gathering...")
     await asyncio.gather(mpdc.connect_mpd(),
                          rfid.run_reader_loop(cfg["RFID"]["evdevpath"],
-                                              mpdc.play_card)
+                                              mpdc.play_card),
+                         loop=loop
                          )
 
 
