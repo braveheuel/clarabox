@@ -94,16 +94,24 @@ class MusicController:
             await self.next()
 
     async def play(self):
-        await self.mpc.play()
+        status = await self.mpc.status()
+        if status["state"] == "play":
+            await self.mpc.pause()
+        else:
+            await self.mpc.play()
 
     async def stop(self):
         await self.mpc.stop()
 
     async def next(self):
-        await self.mpc.next()
+        status = await self.mpc.status()
+        if not status["state"] == "stop":
+            await self.mpc.next()
 
     async def previous(self):
-        await self.mpc.previous()
+        status = await self.mpc.status()
+        if not status["state"] == "stop":
+            await self.mpc.previous()
 
     async def play_pl(self, playlist):
         await self.mpc.stop()
