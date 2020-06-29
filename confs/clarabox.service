@@ -1,0 +1,10 @@
+[Unit]
+Description=Clarabox
+After=mpd.service
+
+[Service]
+Type=simple
+ExecStart=python3 /home/pi/clarabox/clarabox/daemon.py
+
+[Install]
+WantedBy=default.target
