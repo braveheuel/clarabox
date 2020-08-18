@@ -118,5 +118,9 @@ class MusicController:
     async def play_pl(self, playlist):
         await self.mpc.stop()
         await self.mpc.clear()
-        await self.mpc.load(playlist)
+        try:
+            await self.mpc.load(playlist)
+        except mpd.base.CommandError as e:
+            logging.warning(e)
+            return
         await self.mpc.play()
