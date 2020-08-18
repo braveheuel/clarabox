@@ -30,20 +30,17 @@ class GPIOController:
         for i in self.gpiomap:
             btn_name = self.gpiomap[i].lower()
             if not btn_name.startswith("none"):
-                logging.info("%s: %s", i, self.gpiomap[i])
                 self.btnmap[btn_name] = gpiozero.Button(btn_name,
                                                         pull_up=None,
                                                         active_state=False,
                                                         bounce_time=
                                                         self.debounce_time)
-                self.btnmap[btn_name].when_pressed = self._callback;
-                logging.warning("BTN: %s (%s)", btn_name, i)
+                self.btnmap[btn_name].when_released = self._callback;
                 self.btnstrmap[btn_name] = i
 
     def _callback(self, btn):
         name = str(btn.pin).lower()
-        logging.warning("Button pressed! %s", btn)
-        logging.warning("Cmd: %s", self.btnstrmap[name])
+        logging.info("Cmd: %s", self.btnstrmap[name])
         try:
             self.loop.call_soon_threadsafe(self.queue.put_nowait,
                                             self.btnstrmap[name])
