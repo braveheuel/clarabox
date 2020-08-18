@@ -27,6 +27,8 @@ class MusicController:
         with open(rfid_map, "r") as stream:
             self._yaml = yaml.safe_load(stream)
 
+        logging.debug(self._yaml)
+
     async def connect_mpd(self):
         """ Connect to MPD Server and start GPIO listen queue
         """
