@@ -10,7 +10,7 @@ setuptools.setup(
             name="clarabox",
             version="0.0.1",
             author="Christoph Heuel",
-            author_email="Christoph Heuel",
+            author_email="christoph@heuel-web.de",
             description=("Clarabox is similar to a Phoniebox, but slightly \
                          modified"),
             license="MIT",
