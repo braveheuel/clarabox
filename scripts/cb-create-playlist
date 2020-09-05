@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+#
+import argparse
+import configparser
+import yaml
+import glob
+
+
+cfg = configparser.ConfigParser()
+cfg.read("/etc/clarabox.conf")
+
+
+parser = argparse.ArgumentParser(description='Generate Playlists for Clarabox.')
+parser.add_argument('playlistname', type=str,
+                    help='Playlist name to create')
+parser.add_argument('directory', type=str,
+                    help='Directory to search for mp3')
+parser.add_argument('cardid', type=str,
+                    help='Add Playlist as CardID')
+
+args = parser.parse_args()
+
+yaml_mapping = None
+with open(cfg["RFID"]["mapping"], "r") as stream:
+    yaml_mapping = yaml.safe_load(stream)
+
+def main():
+    if args.cardid in yaml_mapping:
+        print("Card already known!")
+        exit(2)
+
+    filelist = glob.glob("{0}/*.mp3".format(args.directory))
+    filelist_clean = map(lambda x: x.replace(cfg["MPD"]["musicdir"] + "/",""), filelist)
+    pln = f"{cfg['MPD']['playlistsdir']}/{args.playlistname}.m3u"
+    #.format(cfg["MPD"]["playlistsdir"], args.playlistname)
+    with open(pln, "w") as plfd:
+        for i in sorted(filelist_clean):
+            plfd.write(i + "\n")
+
+    print(f"'{args.cardid}':")
+    print(f"        playlist: {args.playlistname}")
+
+
+if __name__ == "__main__":
+    main()
