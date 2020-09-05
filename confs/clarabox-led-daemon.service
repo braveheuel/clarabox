@@ -1,0 +1,9 @@
+[Unit]
+Description=Clarabox LED Service
+
+[Service]
+Type=simple
+ExecStart=python3 /home/pi/clarabox/clarabox/led-daemon.py
+
+[Install]
+WantedBy=default.target
