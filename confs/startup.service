@@ -1,0 +1,10 @@
+[Unit]
+Description=Startup Sound
+After=alsa-state.service
+
+[Service]
+Type=simple
+ExecStart=mpg123 /usr/share/clarabox/startup.mp3
+
+[Install]
+WantedBy=default.target
