@@ -53,6 +53,10 @@ class MusicController:
             self.last_swiped_id = cardid
             self.last_swiped_id_count = 0
 
+        if self.last_swiped_id_count > 0:
+            logging.info("Card already playing, skipping swipe!")
+            return
+
         if td > self.swipe_timeout:
             try:
                 (is_command, data) = self.retrieve_card(cardid)
