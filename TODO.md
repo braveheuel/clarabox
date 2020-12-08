@@ -14,4 +14,4 @@
   * [ ] State when it is going to poweroff
   * [ ] Receive Commands
 * [ ] Bluetooth Controlling (WiFi may not be always available)
-
+* [ ] Night/Day Mode
