@@ -128,3 +128,6 @@ class MusicController:
             logging.warning(e)
             return
         await self.mpc.play()
+
+    async def status(self):
+        return await self.mpc.status()
