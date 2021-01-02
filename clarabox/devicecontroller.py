@@ -32,13 +32,17 @@ class DeviceController:
                 )
     
     async def _check_mpd(self):
-        status = await mpd.status()
-        if status.state == "play":
+        try:
+            status = await self.mpd.status()
+        except:
+            logging.info("Could not get status, continueing")
+            return
+        if status["state"] == "play":
             self.idle_counter = 0
             logging.debug("Counter Reset to 0")
         else:
             self.idle_counter += 1
-            logging.debug("Counter Reset to %d", self.idle_counter)
+            logging.debug("Counter set to %d", self.idle_counter)
 
         if self.idle_counter >= self.idle_time:
             logging.info("Reached Idle Counter, turning off Unit! (%d)", self.idle_time)
