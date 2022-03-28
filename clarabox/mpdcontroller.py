@@ -8,8 +8,10 @@ import yaml
 class NoKnownActionException(Exception):
     pass
 
+
 class CardIDNotKnownException(Exception):
     pass
+
 
 class MusicController:
 
@@ -75,7 +77,8 @@ class MusicController:
             self._swipe_ts = current_ts
         else:
             logging.info("Swipe Timeout (%f) not reached: %f",
-                         self.swipe_timeout.total_seconds(), td.total_seconds())
+                         self.swipe_timeout.total_seconds(),
+                         td.total_seconds())
 
     def retrieve_card(self, cardid):
         if cardid in self._yaml:
