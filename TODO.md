@@ -1,6 +1,6 @@
 # What still needs to be done
 
-* [ ] Do not start playing the same Card if it already playing
+* [X] Do not start playing the same Card if it already playing
 * [ ] LED-Daemon
   * [ ] Startup
   * [ ] Animations

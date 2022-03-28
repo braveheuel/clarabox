@@ -98,6 +98,10 @@ class MusicController:
             await self.previous()
         elif ucmd.startswith("nex"):
             await self.next()
+        elif ucmd.startswith("vol+"):
+            await self.volumeup()
+        elif ucmd.startswith("vol-"):
+            await self.volumedown()
 
     async def play(self):
         status = await self.mpc.status()
@@ -118,6 +122,23 @@ class MusicController:
         status = await self.mpc.status()
         if not status["state"] == "stop":
             await self.mpc.previous()
+
+    async def volumeup(self):
+        vol = await self.get_volume() + 1
+        if vol > 30:
+            vol = 30
+        await self.mpc.setvol(vol)
+
+    async def volumedown(self):
+        vol = await self.get_volume() - 1
+        if vol < 0:
+            vol = 0
+        await self.mpc.setvol(vol)
+
+    async def get_volume(self):
+        status = await self.mpc.status()
+        vol = int(status["volume"])
+        return vol
 
     async def play_pl(self, playlist):
         await self.mpc.stop()
