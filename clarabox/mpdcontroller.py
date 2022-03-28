@@ -132,8 +132,8 @@ class MusicController:
 
     async def volumeup(self):
         vol = await self.get_volume() + 1
-        if vol > self.volume_max:
-            vol = self.volume_max
+        if vol > self.vol_max:
+            vol = self.vol_max
         await self.mpc.setvol(vol)
 
     async def volumedown(self):
