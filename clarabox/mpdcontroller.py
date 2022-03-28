@@ -13,18 +13,19 @@ class CardIDNotKnownException(Exception):
 
 class MusicController:
 
-    def __init__(self, host, port, rfid_map, reswipe_time, btn_queue):
+    def __init__(self, cfg, btn_queue):
         self.mpc = mpd.asyncio.MPDClient()
-        self.rfid_map = rfid_map
-        self.swipe_timeout = datetime.timedelta(seconds=reswipe_time)
+        self.rfid_map = cfg["RFID"]["mapping"]
+        self.swipe_timeout = datetime.timedelta(
+            seconds=int(cfg["RFID"]["reswipe_time"]))
         self._swipe_ts = datetime.datetime(2020, 1, 1)
-        self.host = host
-        self.port = port
+        self.host = cfg["MPD"]["host"]
+        self.port = cfg["MPD"]["port"]
         self.btn_queue = btn_queue
         self.last_swiped_id = 0
         self.last_swiped_id_count = 0
 
-        with open(rfid_map, "r") as stream:
+        with open(self.rfid_map, "r") as stream:
             self._yaml = yaml.safe_load(stream)
 
         logging.debug(self._yaml)

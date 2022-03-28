@@ -31,10 +31,7 @@ async def main():
     logger.info("Init the MusicController...")
     loop = asyncio.get_event_loop()
     btn_queue = asyncio.Queue(cfg["GPIO"].getint("max_events", 10))
-    mpdc = mpdcontroller.MusicController(cfg["MPD"]["host"],
-                                         cfg["MPD"].get("port", None),
-                                         cfg["RFID"]["mapping"],
-                                         int(cfg["RFID"]["reswipe_time"]),
+    mpdc = mpdcontroller.MusicController(cfg,
                                          btn_queue)
     gpioc = gpio.GPIOController(cfg["GPIO_MAP"], btn_queue,
                                 cfg.getfloat("GPIO", "debounce_time",
