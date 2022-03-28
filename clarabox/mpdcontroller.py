@@ -22,7 +22,7 @@ class MusicController:
             seconds=int(cfg["RFID"]["reswipe_time"]))
         self._swipe_ts = datetime.datetime(2020, 1, 1)
         self.host = cfg["MPD"]["host"]
-        self.port = cfg["MPD"]["port"]
+        self.port = cfg["MPD"].get("port", None)
         self.vol_max = cfg["MPD"].getint("volume_max", 30)
         self.vol_default = cfg["MPD"].getint("volume_default", 9)
         self.btn_queue = btn_queue
