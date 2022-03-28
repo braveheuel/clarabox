@@ -23,6 +23,8 @@ class MusicController:
         self._swipe_ts = datetime.datetime(2020, 1, 1)
         self.host = cfg["MPD"]["host"]
         self.port = cfg["MPD"]["port"]
+        self.vol_max = cfg["MPD"].getint("volume_max", 30)
+        self.vol_default = cfg["MPD"].getint("volume_default", 9)
         self.btn_queue = btn_queue
         self.last_swiped_id = 0
         self.last_swiped_id_count = 0
@@ -36,6 +38,7 @@ class MusicController:
         """ Connect to MPD Server and start GPIO listen queue
         """
         await self.mpc.connect(self.host, self.port)
+        await self.mpc.setvol(self.vol_default)
         await self._run_listen_btn()
 
     async def _run_listen_btn(self):
@@ -129,8 +132,8 @@ class MusicController:
 
     async def volumeup(self):
         vol = await self.get_volume() + 1
-        if vol > 30:
-            vol = 30
+        if vol > self.volume_max:
+            vol = self.volume_max
         await self.mpc.setvol(vol)
 
     async def volumedown(self):
